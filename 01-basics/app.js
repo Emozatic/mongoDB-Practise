@@ -40,7 +40,7 @@ app.get("/getUsers", async(req,res)=>{
         //UPDATE RELATED:-
         const id= await User.find().select("id").limit(1);
         console.log(id)
-        const data= await User.findByIdAndUpdate(id, {name:"rocky Kumar"})
+        const data= await User.findByIdAndUpdate(id, {name:"lucky Kumar"})
 
         res.json(data)
         console.log(data)
@@ -56,6 +56,25 @@ app.put("/user/:id", async(req,res)=>{
     }
     catch(err){
         res.status(500).json({error: err.message})
+    }
+})
+
+app.delete("/user/:id",async(req,res)=>{
+    try{
+        let {id}= req.params
+        let data= await User.findByIdAndDelete(id);
+        res.json(data)
+    }catch(err){
+        res.status(500).json({error:err.message});
+    }
+})
+
+app.get("/allUsers", async(req,res)=>{
+    try{
+        let data= await User.find({});
+        res.json(data);
+    }catch(err){
+        console.log(err);
     }
 })
 
