@@ -23,6 +23,16 @@ app.post("/users", async (req,res)=>{
     }
 })
 
+app.get("/getUsers", async(req,res)=>{
+    try{
+        let data= await User.findOne({name:"lucky Kumar"});
+        res.json(data)
+        console.log(data)
+    }catch(err){
+        console.log(err);
+    }
+})
+
 app.listen(8000,()=>{
     console.log("app is listening at 8000");
 })
