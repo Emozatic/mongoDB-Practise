@@ -1,9 +1,27 @@
-const express= require("express");
+import express from "express";
 const app= express();
-const User= require("./models/User");
-require("dotenv").config();
+import User from "./models/User.js"
+import "dotenv/config";
+import mongoose from "mongoose";
+app.use(express.json())
 
-mongoose.connect(process.env.MONGO_URL).then(()=>{console.log("MongoDB connected")}).catch((err)=>{console.log(err)});
+
+//connection for MongoDB
+mongoose.connect(process.env.MONGO_URL).then(()=>{console.log("MongoDB connected");
+    console.log("Database", mongoose.connection.db.databaseName)
+}).catch((err)=>{console.log(err)});
+
+
+//start:-
+app.post("/users", async (req,res)=>{
+    try{
+        const user= await User.create(req.body);
+        res.status(201).json(user);
+    }
+    catch(err){
+        res.status(500).json({error:err.message})
+    }
+})
 
 app.listen(8000,()=>{
     console.log("app is listening at 8000");
