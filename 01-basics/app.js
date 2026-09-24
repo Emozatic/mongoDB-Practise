@@ -3,6 +3,7 @@ const app= express();
 import User from "./models/User.js"
 import "dotenv/config";
 import mongoose from "mongoose";
+import Profile from "./models/profile.js";  
 app.use(express.json())
 
 
@@ -71,10 +72,32 @@ app.delete("/user/:id",async(req,res)=>{
 
 app.get("/allUsers", async(req,res)=>{
     try{
-        let data= await User.find({});
+        let id= "6ab3cc5b5be67d06e867f5bb";
+        let data= await User.findById(id);
         res.json(data);
+        console.log(data.projects[0].name)
     }catch(err){
         console.log(err);
+    }
+})
+
+app.post("/profile",async(req,res)=>{
+    try{
+        const profile= await Profile.create(req.body);
+        res.status(201).json(profile);
+    }
+    catch(err){
+        res.status(500).json({error: err.message});
+    }
+});
+
+app.get("/showProfiles", async(req,res)=>{
+    try{
+        const profile= await Profile.find().populate("user");
+        res.json(profile);
+    }
+    catch(err){
+        res.status(500).json({error:err.message})
     }
 })
 
