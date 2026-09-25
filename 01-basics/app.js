@@ -4,6 +4,7 @@ import User from "./models/User.js"
 import "dotenv/config";
 import mongoose from "mongoose";
 import Profile from "./models/profile.js";  
+import Post from "./models/post.js";
 app.use(express.json())
 
 
@@ -101,6 +102,21 @@ app.get("/showProfiles", async(req,res)=>{
     }
 })
 
+//post route for posts
+app.post("/post",async(req,res)=>{
+    try{
+        const post = await Post.create(req.body);
+        res.status(201).json(post);
+    }
+    catch(err){
+        res.status(500).json({error: err.message});
+    }
+})
+app.get("/post/user",async(req,res)=>{
+    let id= "6ab3caff0502466560909a3b";
+    let data= await Post.find().populate("author");
+    res.json(data);
+})
 app.listen(8000,()=>{
     console.log("app is listening at 8000");
 })
